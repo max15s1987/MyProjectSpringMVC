@@ -2,7 +2,6 @@ package org.example.model;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "users")
@@ -13,21 +12,15 @@ public class User {
     private Integer id;
 
     @Column
-    @NotEmpty(message = "Enter your name")
-    @Size(min = 2, max = 50, message = "Please enter a valid name")
     private String name;
 
     @Column
-    @Min(value = 0, message = "Please enter a valid age")
     private Integer age;
 
     @Column
-    @NotEmpty(message = "Enter your city")
     private String city;
 
     @Column
-    @NotEmpty(message = "Enter your email")
-    @Email
     private String email;
 
     public User(Integer id, String name, Integer age, String city, String email) {
@@ -80,5 +73,12 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
