@@ -6,8 +6,8 @@
 </head>
 <body>
 <div align="center">
-    <h2>Edit Customer</h2>
-    <form method="POST" th:action="@{/users/edit(id=${user.getId()})}" th:object="${user}">
+    <h2>Edit user</h2>
+    <form method="POST" th:action="@{/admin/edit(id=${user.getId()})}" th:object="${user}">
         <table border="0" cellpadding="5">
 <!--            <tr>-->
 <!--                <td>ID: </td>-->

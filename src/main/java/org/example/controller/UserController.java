@@ -1,59 +1,72 @@
 package org.example.controller;
 
-import org.example.dao.UserDaoImpl;
 import org.example.model.User;
-import org.example.service.UserService;
+import org.example.service.UserServiceImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public String getPeopleList(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "users/users";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/admin/new")
     public String newUser(Model model) {
         model.addAttribute(new User());
         return "users/new";
     }
 
-    @PostMapping
+
+    @PostMapping("/admin")
     public String createUser(@ModelAttribute("user") User user) {
         userService.save(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
-    @RequestMapping(value = "edit", method = RequestMethod.GET)
-    public String edit(Model model, @RequestParam(value ="id", required = false) Integer id) {
+    @GetMapping("/admin/edit")
+    public String edit(Model model, @RequestParam(value ="id", required = false) Long id) {
         model.addAttribute("user", userService.getUserById(id));
         return "users/edit";
     }
 
-
-    @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public String update(@ModelAttribute("user") User user, @RequestParam(value ="id", required = false) Integer id) {
+    @PostMapping("/admin/edit")
+    public String update(@ModelAttribute("user") User user, @RequestParam(value ="id", required = false) Long id) {
         userService.update(id, user);
-        return "redirect:/users";
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/user")
+    public String getUserById(Model model) {
+        Long id = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        model.addAttribute("user", userService.getUserById(id));
+        return "users/showuser";
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(value = "id", required = false) Integer id) {
+    public String delete(@RequestParam(value = "id", required = false) Long id) {
         userService.remove(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "users/login";
+    }
+
 }

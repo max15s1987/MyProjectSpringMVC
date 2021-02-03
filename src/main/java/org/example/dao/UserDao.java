@@ -7,7 +7,8 @@ public interface UserDao {
 
     List<User> getAllUsers();
     void save(User user);
-    void update(int id, User user);
-    void remove(int id);
-    User getUserById(int id);
+    void update(Long id, User user);
+    void remove(Long id);
+    User getUserById(Long id);
+    User findByLogin(String s);
 }

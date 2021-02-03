@@ -2,15 +2,23 @@ package org.example.service;
 
 import org.example.dao.UserDao;
 import org.example.dao.UserDaoImpl;
+import org.example.model.Role;
 import org.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserDetailsService {
 
     private final UserDao userDao;
 
@@ -18,28 +26,31 @@ public class UserServiceImpl implements UserService {
         this.userDao = userDao;
     }
 
-    @Override
+
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 
-    @Override
     public void save(User user) {
         userDao.save(user);
     }
 
-    @Override
-    public void update(int id, User user) {
+    public void update(Long id, User user) {
         userDao.update(id, user);
     }
 
-    @Override
-    public void remove(int id) {
+    public void remove(Long id) {
         userDao.remove(id);
     }
 
-    @Override
-    public User getUserById(int id) {
+    public User getUserById(Long id) {
         return userDao.getUserById(id);
     }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return userDao.findByLogin(s);
+    }
+
 }

@@ -3,11 +3,9 @@ package org.example.dao;
 import org.example.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import java.util.List;
 
 @Repository
@@ -22,9 +20,16 @@ public class UserDaoImpl implements UserDao {
         return entityManager.createQuery("SELECT u FROM User u").getResultList();
     }
 
-    public User getUserById(int id) {
+    public User getUserById(Long id) {
         Query query = entityManager.createQuery("SELECT i from User i where i.id = :paramId");
         query.setParameter("paramId", id);
+        return (User) query.getSingleResult();
+    }
+
+    @Override
+    public User findByLogin(String s) {
+        Query query = entityManager.createQuery("SELECT e from User e where e.email = :paramEmail");
+        query.setParameter("paramEmail", s);
         return (User) query.getSingleResult();
     }
 
@@ -34,7 +39,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(int id, User user) {
+    public void update(Long id, User user) {
 
         User userUpdate = getUserById(id);
 
@@ -47,7 +52,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void remove(int id) {
+    public void remove(Long id) {
         Query query = entityManager.createQuery("DELETE FROM User u WHERE u.id = :paramId");
         query.setParameter("paramId", id).executeUpdate();
     }
