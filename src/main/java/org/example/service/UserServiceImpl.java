@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
@@ -48,9 +48,6 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userDao.findByLogin(s);
-    }
+
 
 }

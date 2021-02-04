@@ -3,6 +3,7 @@ package org.example.controller;
 import org.example.model.User;
 import org.example.service.UserServiceImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,13 @@ public class UserController {
 
     @GetMapping("/admin/edit")
     public String edit(Model model, @RequestParam(value ="id", required = false) Long id) {
-        model.addAttribute("user", userService.getUserById(id));
+        User user = userService.getUserById(id);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Unknown user");
+        }
+
+        model.addAttribute("user", user);
         return "users/edit";
     }
 

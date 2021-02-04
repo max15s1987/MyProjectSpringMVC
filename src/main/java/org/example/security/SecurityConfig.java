@@ -1,6 +1,5 @@
-package org.example.config;
+package org.example.security;
 
-import org.example.config.handler.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
+    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
 
     }
@@ -47,8 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/admin/**").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
+                .antMatchers("/login").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user").hasRole("USER").anyRequest().authenticated();
     }
 
     @Bean
