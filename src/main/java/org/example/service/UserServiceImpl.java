@@ -47,7 +47,9 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserById(id);
     }
 
-
+    public boolean checkId(Long id) {
+        return userDao.checkId(id);
+    }
 
 
 }

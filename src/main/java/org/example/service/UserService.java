@@ -10,5 +10,5 @@ public interface UserService {
     void update(Long id, User user);
     void remove(Long id);
     User getUserById(Long id);
-
+    boolean checkId(Long id);
 }

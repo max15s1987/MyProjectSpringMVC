@@ -11,4 +11,5 @@ public interface UserDao {
     void remove(Long id);
     User getUserById(Long id);
     User findByLogin(String s);
+    boolean checkId(Long id);
 }

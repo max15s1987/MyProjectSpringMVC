@@ -33,6 +33,13 @@ public class UserDaoImpl implements UserDao {
         return (User) query.getSingleResult();
     }
 
+
+    public boolean checkId(Long id) {
+        Query query = entityManager.createQuery("SELECT i.id from User i where i.id = :paramId");
+        query.setParameter("paramId", id);
+        return query.getResultList().isEmpty();
+    }
+
     @Override
     public void save(User user) {
         entityManager.persist(user);
@@ -56,5 +63,7 @@ public class UserDaoImpl implements UserDao {
         Query query = entityManager.createQuery("DELETE FROM User u WHERE u.id = :paramId");
         query.setParameter("paramId", id).executeUpdate();
     }
+
+
 
 }

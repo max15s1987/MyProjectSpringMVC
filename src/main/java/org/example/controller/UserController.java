@@ -41,19 +41,24 @@ public class UserController {
     }
 
     @GetMapping("/admin/edit")
-    public String edit(Model model, @RequestParam(value ="id", required = false) Long id) {
-        User user = userService.getUserById(id);
+    public String edit(Model model, @RequestParam(value ="id") Long id) {
 
-        if (user == null) {
-            throw new UsernameNotFoundException("Unknown user");
+        if (userService.checkId(id)) {
+            return "users/unknownUser";
+
         }
 
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.getUserById(id));
         return "users/edit";
     }
 
     @PostMapping("/admin/edit")
-    public String update(@ModelAttribute("user") User user, @RequestParam(value ="id", required = false) Long id) {
+    public String update(@ModelAttribute("user") User user, @RequestParam(value ="id") Long id) {
+
+        if (userService.checkId(id)) {
+            return "users/unknownUser";
+        }
+
         userService.update(id, user);
         return "redirect:/admin";
     }
@@ -66,7 +71,12 @@ public class UserController {
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(value = "id", required = false) Long id) {
+    public String delete(@RequestParam(value = "id") Long id) {
+
+        if (userService.checkId(id)) {
+            return "users/unknownUser";
+        }
+
         userService.remove(id);
         return "redirect:/admin";
     }
